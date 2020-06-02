@@ -2,9 +2,9 @@ package com.soulkey.fspicker.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.soulkey.fspicker.model.Location
+import com.soulkey.fspicker.model.RecommendedVenue
 
-@Database(entities = [Location::class], version = 1, exportSchema = false)
+@Database(entities = [RecommendedVenue::class], version = 1, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
-    abstract fun locationDao(): LocationDao
+    abstract fun recommendedVenueDao(): RecommendedVenueDao
 }

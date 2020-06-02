@@ -17,7 +17,7 @@
             android:id="@+id/tv_current_location_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Current Location: "
+            android:text="Current Location:"
             android:layout_margin="8dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -40,6 +40,7 @@
         android:id="@+id/view_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:background="@color/black"
         app:layout_constraintTop_toBottomOf="@id/layout_current_location_info"/>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -47,6 +48,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintTop_toBottomOf="@id/view_divider"
         />
 

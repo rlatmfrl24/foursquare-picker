@@ -10,5 +10,8 @@ import retrofit2.http.Query
 interface FoursquareAPI {
 
     @GET("v2/venues/explore?$FOURSQUARE_BASIC_PARAM")
-    fun getRecommendByLL(@Query("ll") ll: String): Single<Response<RecommandVenuesResponse>>
+    fun getRecommendByLL(@Query("ll") ll: String): Single<Response<FoursquareResponse>>
+
+    @GET("v2/venues/{VENUE_ID}/photos?$FOURSQUARE_BASIC_PARAM&group=venue")
+    fun getPhotosById(@Path("VENUE_ID") fsId: String): Single<Response<FoursquareResponse>>
 }

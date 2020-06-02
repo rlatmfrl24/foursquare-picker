@@ -17,11 +17,14 @@ import timber.log.Timber
 class MainActivity : AppCompatActivity() {
     private val mainViewModel: MainViewModel by viewModel()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var venueAdapter: VenueAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mainViewModel.clearVenues()
 
+        // 위치 권한 요청
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
             && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
@@ -33,20 +36,17 @@ class MainActivity : AppCompatActivity() {
                 PERMISSION_REQUEST_CODE
             )
         }
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        mainViewModel.currentLL.observe(this, Observer{
-            mainViewModel.callRecommendVenues(it.first, it.second).subscribe { response->
-                if (response.isSuccessful) {
-                    response.body()?.let {venues->
-                        val loc = venues.response["headerLocation"]
-                        Timber.v("diver:/ "+loc.asString)
-                    }
-                }
-                else{
-                    Toast.makeText(this, "Request Error:: ${response.code()}", Toast.LENGTH_SHORT).show()
-                }
-            }
+        // GMS 클라이언트
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        venueAdapter = VenueAdapter()
+        recycler_venue_list.apply { adapter = venueAdapter }
+
+        mainViewModel.currentLocation.observe(this, Observer {
+            tv_current_location.text = it
+        })
+        mainViewModel.recommendedVenues.observe(this, Observer {
+            venueAdapter.submitList(it)
         })
 
         fab_refresh.setOnClickListener {
@@ -58,6 +58,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainViewModel.clearVenues()
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
