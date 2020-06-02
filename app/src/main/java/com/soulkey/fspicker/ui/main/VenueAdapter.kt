@@ -1,6 +1,7 @@
 package com.soulkey.fspicker.ui.main
 
 import android.content.Intent
+import android.location.Address
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +35,8 @@ class VenueAdapter :
             itemView.setOnClickListener {
                 Intent(itemView.context, VenueDetailActivity::class.java).also { intent ->
                     intent.putExtra("fsId", venue.fsId)
+                    intent.putExtra("venueName", venue.name)
+                    intent.putExtra("venueAddress", venue.address)
                     itemView.context.startActivity(intent)
                 }
             }
