@@ -12,8 +12,8 @@ class FoursquareClient (private val api: FoursquareAPI) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getVenuePhotos(fsId: String): Single<Response<FoursquareResponse>> {
-        return api.getPhotosById(fsId)
+    fun getVenueDetail(fsId: String): Single<Response<FoursquareResponse>> {
+        return api.getDetailById(fsId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

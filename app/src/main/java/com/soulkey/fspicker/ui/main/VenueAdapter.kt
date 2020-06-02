@@ -1,5 +1,6 @@
 package com.soulkey.fspicker.ui.main
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.soulkey.fspicker.R
 import com.soulkey.fspicker.model.RecommendedVenue
+import com.soulkey.fspicker.ui.detail.VenueDetailActivity
 import kotlinx.android.synthetic.main.item_venue.view.*
 import timber.log.Timber
 
@@ -28,9 +30,12 @@ class VenueAdapter :
         fun bind(venue: RecommendedVenue){
             itemView.tv_venue_name.text = venue.name
             itemView.tv_venue_address.text = venue.address
-            Glide.with(itemView).load(venue.previewLink).centerCrop().into(itemView.iv_venue_photo)
+            Glide.with(itemView).load(venue.iconLink).centerCrop().into(itemView.iv_venue_photo)
             itemView.setOnClickListener {
-                Timber.v("diver:/ onTouch with ${venue.fsId}")
+                Intent(itemView.context, VenueDetailActivity::class.java).also { intent ->
+                    intent.putExtra("fsId", venue.fsId)
+                    itemView.context.startActivity(intent)
+                }
             }
         }
     }

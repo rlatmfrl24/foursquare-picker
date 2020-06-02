@@ -15,6 +15,6 @@ data class RecommendedVenue(
     val name: String,
     @ColumnInfo(name = "address")
     val address: String,
-    @ColumnInfo(name = "previewLink")
-    val previewLink: String?
+    @ColumnInfo(name = "iconLink")
+    val iconLink: String?
 )

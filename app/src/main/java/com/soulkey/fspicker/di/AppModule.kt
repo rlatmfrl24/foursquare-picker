@@ -10,6 +10,7 @@ import com.soulkey.fspicker.data.RecommendedVenueRepositoryImpl
 import com.soulkey.fspicker.db.AppDatabase
 import com.soulkey.fspicker.lib.FoursquareAPI
 import com.soulkey.fspicker.lib.FoursquareClient
+import com.soulkey.fspicker.ui.detail.VenueDetailViewModel
 import com.soulkey.fspicker.ui.main.MainViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -56,4 +57,5 @@ val AppModule = module {
 
     //ViewModel Injection
     viewModel { MainViewModel(get(), get()) }
+    viewModel { VenueDetailViewModel(get()) }
 }
