@@ -24,6 +24,8 @@ class RecommendedVenueRepositoryImpl (private val recommendedVenueDao: Recommend
             }
             RecommendedVenue(null, venueId, venueName, venueAddress, firstCategory)
         }
+        Timber.v("diver:/ venue size: ${venueList.size}")
+
         recommendedVenueDao.updateVenues(venueList)
     }
 

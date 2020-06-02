@@ -57,5 +57,5 @@ val AppModule = module {
 
     //ViewModel Injection
     viewModel { MainViewModel(get(), get()) }
-    viewModel { VenueDetailViewModel(get()) }
+    viewModel { VenueDetailViewModel(get(), get()) }
 }

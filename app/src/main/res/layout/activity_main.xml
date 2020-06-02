@@ -36,7 +36,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{viewModel.currentLocation}"
-                android:layout_marginLeft="8dp"
+                android:fontFamily="@font/opensans_bold"
+                android:layout_marginStart="8dp"
                 app:layout_constraintLeft_toRightOf="@id/tv_current_location_label"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -54,11 +55,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_venue_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:clipToPadding="false"
             android:paddingTop="4dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/view_divider"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

@@ -8,7 +8,7 @@ import io.reactivex.disposables.Disposable
 
 class MainViewModel(private val recommendedVenueRepository: RecommendedVenueRepository, private val client: FoursquareClient): ViewModel() {
     private val currentLL: MutableLiveData<Pair<Double, Double>> = MutableLiveData()
-    val currentLocation: MutableLiveData<String> = MutableLiveData()
+    val currentLocation: MutableLiveData<String> = MutableLiveData("Unknown")
     val recommendedVenues = recommendedVenueRepository.getAllVenues()
 
     fun clearVenues(){
