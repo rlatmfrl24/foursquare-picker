@@ -52,7 +52,7 @@ val AppModule = module {
             .build()
     }
 
-    single { FoursquareAPIClient(get()) }
+    single { FoursquareAPIClient(get(), get()) }
     single { get<AppDatabase>().recommendedVenueDao() }
     single<RecommendedVenueRepository> {RecommendedVenueRepositoryImpl(get())}
 
