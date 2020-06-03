@@ -5,11 +5,11 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.soulkey.fspicker.lib.data.RecommendedVenueRepository
-import com.soulkey.fspicker.lib.api.FoursquareClient
+import com.soulkey.fspicker.lib.api.FoursquareAPIClient
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
-class MainViewModel(private val recommendedVenueRepository: RecommendedVenueRepository, private val client: FoursquareClient, private val context: Context): ViewModel() {
+class MainViewModel(private val recommendedVenueRepository: RecommendedVenueRepository, private val client: FoursquareAPIClient, private val context: Context): ViewModel() {
     private val currentLL: MutableLiveData<Pair<Double, Double>> = MutableLiveData()
     val currentLocation: MutableLiveData<String> = MutableLiveData("Unknown")
     val isVenuesLoaded = MutableLiveData(false)
@@ -21,33 +21,17 @@ class MainViewModel(private val recommendedVenueRepository: RecommendedVenueRepo
 
     fun updateCurrentLL(latitude: Double, longitude: Double): Disposable{
         currentLL.value = Pair(latitude, longitude)
-        return client.getRecommendVenues(latitude, longitude).subscribe { response->
-            if (response.isSuccessful){
-                val apiStatusCode = response.body()!!.meta["code"].asString
-                if (apiStatusCode == "200"){
-                    val responseLocation = response.body()?.response?.get("headerFullLocation")?.asString
-                    val recommendedVenues =
-                        response.body()?.response?.
-                        get("groups")?.asJsonArray?.
-                        get(0)?.asJsonObject?.
-                        get("items")?.asJsonArray
-                    currentLocation.value = responseLocation
-                    isVenuesLoaded.value = true
-                    recommendedVenues?.let {
-                        recommendedVenueRepository.updateVenues(it)
-                    }
-                }
-                else {
-                    //Error Toast
-                    val metaData = response.body()!!.meta.asJsonObject
-                    Timber.v(response.body()!!.meta.toString())
-                    if (metaData.has("errorDetail")){
-                        Toast.makeText(context, metaData["errorDetail"].asString, Toast.LENGTH_SHORT).show()
-                    }
-                }
-
+        return client.getRecommendVenues(latitude, longitude).subscribe { body->
+            if (body.meta.code == "200"){
+                val data = body.response
+                val recommendVenus = data.groups[0].items
+                currentLocation.value = data.headerFullLocation
+                recommendedVenueRepository.updateVenues(recommendVenus)
+                isVenuesLoaded.value = true
             } else {
-                Timber.v(response.errorBody().toString())
+                if (body.meta.errorDetail != null){
+                    Toast.makeText(context, body.meta.errorDetail, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

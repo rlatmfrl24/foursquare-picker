@@ -5,15 +5,16 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
-import com.soulkey.fspicker.lib.api.FoursquareClient
+import com.soulkey.fspicker.lib.api.FoursquareAPIClient
 import com.soulkey.fspicker.lib.model.Tip
+import com.soulkey.fspicker.lib.model.VenueDetail
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
-class VenueDetailViewModel(private val client: FoursquareClient, private val context: Context) : ViewModel() {
+class VenueDetailViewModel(private val client: FoursquareAPIClient, private val context: Context) : ViewModel() {
     val venueName = MutableLiveData("Venue Name")
     val venueAddress = MutableLiveData("Venue Address")
-    val venuePhone = MutableLiveData("Venue Phone")
+    val venuePhone = MutableLiveData("Unknown")
     val venueLikeCount = MutableLiveData("0")
     val venueRating = MutableLiveData("0.0")
     val venuePhotoUrl = MutableLiveData<String>()
@@ -24,81 +25,43 @@ class VenueDetailViewModel(private val client: FoursquareClient, private val con
         venueAddress.value = address
     }
 
-    private fun parseVenueData(data: JsonObject) {
-        //contact
-        if (data.has("contact")) {
-            val venueContactData = data.get("contact").asJsonObject
-            if (venueContactData.has("phone")) {
-                venuePhone.value = venueContactData["phone"].asString
+    private fun parseVenueData(data: VenueDetail) {
+        data.contact.formattedPhone?.let {
+            venuePhone.value = data.contact.formattedPhone
+        }
+        venueLikeCount.value = data.likes?.count.toString()
+        venueRating.value = data.rating
+
+        Timber.v("diver:/ ${data.contact}")
+
+        val venuePhotoData = data.photos?.groups?.get(0)?.items?.get(0)
+        venuePhotoData?.let {
+            venuePhotoUrl.value = venuePhotoData.prefix+"500x500"+venuePhotoData.suffix
+        }
+
+        val venueTipData = data.tips?.groups?.get(0)?.items
+        venueTipData?.let {tips->
+            val itemList = tips.map { item->
+                var userName = item.user.firstName
+                if (item.user.lastName != null) userName += ", ${item.user.lastName}"
+                val userPhotoUrl = item.user.photo?.prefix + "36x36" + item.user.photo?.suffix
+                val description = item.text
+                val userId = item.user.id
+                Tip(userId, userPhotoUrl, userName, description)
             }
-        }
-
-        //location(Not Necessary)
-        if (data.has("location")) {
-            val venueLocationData = data.get("location").asJsonObject
-        }
-
-        //like
-        if (data.has("likes")) {
-            val venueLikeData = data.get("likes").asJsonObject
-            if (venueLikeData.has("count")) {
-                venueLikeCount.value = venueLikeData["count"].asString
-            }
-        }
-
-        //rating
-        if (data.has("rating")) {
-            venueRating.value = data.get("rating").asString
-        }
-
-        //photos
-        if (data.has("photos")) {
-            val venuePhotoData = data.get("photos").asJsonObject
-            if (venuePhotoData["count"].asInt > 0 && venuePhotoData.has("groups")){
-                val photo = venuePhotoData["groups"].asJsonArray.get(0).asJsonObject.get("items").asJsonArray.get(0).asJsonObject
-                venuePhotoUrl.value = "${photo["prefix"].asString}500x500${photo["suffix"].asString}"
-            }
-        }
-
-        //tips
-        if (data.has("tips")) {
-            val venueTipsData = data.get("tips").asJsonObject
-            if (venueTipsData["count"].asInt > 0 && venueTipsData.has("groups")) {
-                val tipItemList = venueTipsData["groups"].asJsonArray[0].asJsonObject["items"].asJsonArray
-                val itemList = tipItemList.map { tipData->
-                    val item = tipData.asJsonObject
-                    val userData = item["user"].asJsonObject
-                    val userId = userData["id"].asString
-                    var userName = "Unknown"
-                    if (userData.has("firstName")) userName = userData["firstName"].asString
-                    if (userData.has("lastName")) userName += ", ${userData["lastName"].asString}"
-                    val userPhotoData = userData["photo"].asJsonObject
-                    val photoUrl = "${userPhotoData["prefix"].asString}32x32${userPhotoData["suffix"].asString}"
-                    val description = item["text"].asString
-                    Tip(userId, photoUrl, userName, description)
-                }
-                tipsList.value = itemList
-            }
+            tipsList.value = itemList
         }
     }
 
     fun requestVenueDetail(fsId: String): Disposable {
-        return client.getVenueDetail(fsId).subscribe { response ->
-            if (response.isSuccessful) {
-                val apiStatusCode = response.body()!!.meta["code"].asString
-                if (apiStatusCode == "200"){
-                    val venueData = response.body()?.response?.asJsonObject?.get("venue")?.asJsonObject
-                    venueData?.let { parseVenueData(it) }
-                }else {
-                    //Error Toast
-                    val metaData = response.body()!!.meta.asJsonObject
-                    Timber.v(response.body()!!.meta.toString())
-                    if (metaData.has("errorDetail")){
-                        Toast.makeText(context, metaData["errorDetail"].asString, Toast.LENGTH_SHORT).show()
-                    }
-                }
+        return client.getVenueDetail(fsId).subscribe { body ->
+            if (body.meta.code == "200") {
+                val data = body.response
+                parseVenueData(data.venue)
             } else {
-                Timber.v(response.errorBody().toString())
+                if (body.meta.errorDetail != null){
+                    Toast.makeText(context, body.meta.errorDetail, Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }

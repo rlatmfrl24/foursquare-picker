@@ -8,8 +8,8 @@ import com.soulkey.fspicker.config.Constant.WRITE_TIMEOUT
 import com.soulkey.fspicker.lib.data.RecommendedVenueRepository
 import com.soulkey.fspicker.lib.data.RecommendedVenueRepositoryImpl
 import com.soulkey.fspicker.lib.db.AppDatabase
-import com.soulkey.fspicker.lib.api.FoursquareAPI
-import com.soulkey.fspicker.lib.api.FoursquareClient
+import com.soulkey.fspicker.lib.api.FoursquareAPIService
+import com.soulkey.fspicker.lib.api.FoursquareAPIClient
 import com.soulkey.fspicker.lib.api.FoursqueareInterceptor
 import com.soulkey.fspicker.ui.detail.VenueDetailViewModel
 import com.soulkey.fspicker.ui.main.MainViewModel
@@ -42,7 +42,7 @@ val AppModule = module {
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-            .create(FoursquareAPI::class.java)
+            .create(FoursquareAPIService::class.java)
     }
     //Room
     single {
@@ -52,7 +52,7 @@ val AppModule = module {
             .build()
     }
 
-    single { FoursquareClient(get()) }
+    single { FoursquareAPIClient(get()) }
     single { get<AppDatabase>().recommendedVenueDao() }
     single<RecommendedVenueRepository> {RecommendedVenueRepositoryImpl(get())}
 
