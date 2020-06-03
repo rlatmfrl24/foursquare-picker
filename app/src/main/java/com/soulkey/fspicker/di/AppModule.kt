@@ -8,8 +8,9 @@ import com.soulkey.fspicker.config.Constant.WRITE_TIMEOUT
 import com.soulkey.fspicker.data.RecommendedVenueRepository
 import com.soulkey.fspicker.data.RecommendedVenueRepositoryImpl
 import com.soulkey.fspicker.db.AppDatabase
-import com.soulkey.fspicker.lib.FoursquareAPI
-import com.soulkey.fspicker.lib.FoursquareClient
+import com.soulkey.fspicker.net.FoursquareAPI
+import com.soulkey.fspicker.net.FoursquareClient
+import com.soulkey.fspicker.net.FoursqueareInterceptor
 import com.soulkey.fspicker.ui.detail.VenueDetailViewModel
 import com.soulkey.fspicker.ui.main.MainViewModel
 import okhttp3.OkHttpClient
@@ -19,13 +20,13 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 import java.util.concurrent.TimeUnit
 
 val AppModule = module {
     //OkHttpClient
     single {
         OkHttpClient.Builder()
+            .addInterceptor(FoursqueareInterceptor())
             .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
@@ -56,6 +57,6 @@ val AppModule = module {
     single<RecommendedVenueRepository> {RecommendedVenueRepositoryImpl(get())}
 
     //ViewModel Injection
-    viewModel { MainViewModel(get(), get()) }
+    viewModel { MainViewModel(get(), get(), get()) }
     viewModel { VenueDetailViewModel(get(), get()) }
 }

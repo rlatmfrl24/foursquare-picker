@@ -1,6 +1,7 @@
 package com.soulkey.fspicker.ui.detail
 
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -24,6 +25,8 @@ class VenueDetailActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.viewModel = venueDetailViewModel
 
+        supportActionBar?.title = "Venue's Detail"
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         tipsAdapter = TipsAdapter()
         recycler_tips_list.apply {
             this.adapter = tipsAdapter
@@ -41,5 +44,10 @@ class VenueDetailActivity : AppCompatActivity() {
         val requestId = intent.getStringExtra("fsId")!!
         venueDetailViewModel.setBasicData(venueName, venueAddress)
         venueDetailViewModel.requestVenueDetail(requestId)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        onBackPressed()
+        return super.onOptionsItemSelected(item)
     }
 }

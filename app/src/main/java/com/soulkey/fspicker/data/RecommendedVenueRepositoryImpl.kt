@@ -3,9 +3,7 @@ package com.soulkey.fspicker.data
 import androidx.lifecycle.LiveData
 import com.google.gson.JsonArray
 import com.soulkey.fspicker.db.RecommendedVenueDao
-import com.soulkey.fspicker.lib.FoursquareClient
 import com.soulkey.fspicker.model.RecommendedVenue
-import timber.log.Timber
 
 class RecommendedVenueRepositoryImpl (private val recommendedVenueDao: RecommendedVenueDao): RecommendedVenueRepository{
     override fun updateVenues(data: JsonArray) {
@@ -24,8 +22,6 @@ class RecommendedVenueRepositoryImpl (private val recommendedVenueDao: Recommend
             }
             RecommendedVenue(null, venueId, venueName, venueAddress, firstCategory)
         }
-        Timber.v("diver:/ venue size: ${venueList.size}")
-
         recommendedVenueDao.updateVenues(venueList)
     }
 

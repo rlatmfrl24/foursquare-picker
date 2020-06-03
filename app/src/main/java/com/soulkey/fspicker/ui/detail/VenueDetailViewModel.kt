@@ -1,10 +1,11 @@
 package com.soulkey.fspicker.ui.detail
 
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
-import com.soulkey.fspicker.lib.FoursquareClient
+import com.soulkey.fspicker.net.FoursquareClient
 import com.soulkey.fspicker.model.Tip
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
@@ -84,8 +85,18 @@ class VenueDetailViewModel(private val client: FoursquareClient, private val con
     fun requestVenueDetail(fsId: String): Disposable {
         return client.getVenueDetail(fsId).subscribe { response ->
             if (response.isSuccessful) {
-                val venueData = response.body()?.response?.asJsonObject?.get("venue")?.asJsonObject
-                venueData?.let { parseVenueData(it) }
+                val apiStatusCode = response.body()!!.meta["code"].asString
+                if (apiStatusCode == "200"){
+                    val venueData = response.body()?.response?.asJsonObject?.get("venue")?.asJsonObject
+                    venueData?.let { parseVenueData(it) }
+                }else {
+                    //Error Toast
+                    val metaData = response.body()!!.meta.asJsonObject
+                    Timber.v(response.body()!!.meta.toString())
+                    if (metaData.has("errorDetail")){
+                        Toast.makeText(context, metaData["errorDetail"].asString, Toast.LENGTH_SHORT).show()
+                    }
+                }
             } else {
                 Timber.v(response.errorBody().toString())
             }

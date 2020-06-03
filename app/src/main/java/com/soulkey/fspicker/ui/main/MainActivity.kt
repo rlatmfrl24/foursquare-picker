@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -50,15 +51,32 @@ class MainActivity : AppCompatActivity() {
         recycler_venue_list.apply { adapter = venueAdapter }
         mainViewModel.recommendedVenues.observe(this, Observer {
             venueAdapter.submitList(it)
+            pb_venues_loading.visibility = View.GONE
+            if (it.isNotEmpty()) {
+                tv_guide_to_refresh.visibility = View.GONE
+                recycler_venue_list.visibility = View.VISIBLE
+            } else if (it.isEmpty() && mainViewModel.isVenuesLoaded.value == true) {
+                tv_guide_to_refresh.visibility = View.VISIBLE
+                tv_guide_to_refresh.text = "Can't Find Any Venue.."
+            } else {
+                tv_guide_to_refresh.visibility = View.VISIBLE
+                tv_guide_to_refresh.text = "Allow the Location Setting \n&\n Press Refresh Button"
+            }
         })
 
         //FAB 동작 설정
         fab_refresh.setOnClickListener {
+            pb_venues_loading.visibility = View.VISIBLE
+            tv_guide_to_refresh.visibility = View.GONE
+            recycler_venue_list.visibility = View.GONE
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 location?.let {
                     Timber.v("diver:/ LL updated")
                     mainViewModel.updateCurrentLL(it.latitude, it.longitude)
                 }
+            }.addOnFailureListener {
+                mainViewModel.updateCurrentLL(1.283644,103.860753)
+                Timber.v("diver:/ ${it.localizedMessage}")
             }
         }
     }
@@ -79,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     Timber.v("diver:/ Granted")
                 } else {
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Permission denied, Set as the Default Location", Toast.LENGTH_SHORT).show()
                 }
             }
         }

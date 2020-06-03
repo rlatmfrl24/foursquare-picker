@@ -1,4 +1,4 @@
-package com.soulkey.fspicker.lib
+package com.soulkey.fspicker.net
 
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers

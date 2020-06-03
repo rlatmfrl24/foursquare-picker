@@ -1,4 +1,4 @@
-package com.soulkey.fspicker.lib
+package com.soulkey.fspicker.net
 
 import com.google.gson.JsonObject
 import com.google.gson.annotations.SerializedName
