@@ -1,12 +1,11 @@
-package com.soulkey.fspicker.db
+package com.soulkey.fspicker.lib.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import com.soulkey.fspicker.model.RecommendedVenue
-import io.reactivex.Single
+import com.soulkey.fspicker.lib.model.RecommendedVenue
 
 @Dao
 interface RecommendedVenueDao {

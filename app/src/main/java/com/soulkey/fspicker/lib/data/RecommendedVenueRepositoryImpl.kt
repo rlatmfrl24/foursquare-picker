@@ -1,9 +1,9 @@
-package com.soulkey.fspicker.data
+package com.soulkey.fspicker.lib.data
 
 import androidx.lifecycle.LiveData
 import com.google.gson.JsonArray
-import com.soulkey.fspicker.db.RecommendedVenueDao
-import com.soulkey.fspicker.model.RecommendedVenue
+import com.soulkey.fspicker.lib.db.RecommendedVenueDao
+import com.soulkey.fspicker.lib.model.RecommendedVenue
 
 class RecommendedVenueRepositoryImpl (private val recommendedVenueDao: RecommendedVenueDao): RecommendedVenueRepository{
     override fun updateVenues(data: JsonArray) {

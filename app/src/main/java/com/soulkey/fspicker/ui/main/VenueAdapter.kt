@@ -1,7 +1,6 @@
 package com.soulkey.fspicker.ui.main
 
 import android.content.Intent
-import android.location.Address
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,10 +9,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.soulkey.fspicker.R
-import com.soulkey.fspicker.model.RecommendedVenue
+import com.soulkey.fspicker.lib.model.RecommendedVenue
 import com.soulkey.fspicker.ui.detail.VenueDetailActivity
 import kotlinx.android.synthetic.main.item_venue.view.*
-import timber.log.Timber
 
 val VenueDiff = object: DiffUtil.ItemCallback<RecommendedVenue>(){
     override fun areItemsTheSame(oldItem: RecommendedVenue, newItem: RecommendedVenue): Boolean {

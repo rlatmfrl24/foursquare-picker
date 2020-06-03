@@ -1,4 +1,4 @@
-package com.soulkey.fspicker.model
+package com.soulkey.fspicker.lib.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -1,4 +1,4 @@
-package com.soulkey.fspicker.model
+package com.soulkey.fspicker.lib.model
 
 data class Tip(
     val id: String,

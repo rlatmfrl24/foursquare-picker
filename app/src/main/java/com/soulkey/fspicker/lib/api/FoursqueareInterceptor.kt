@@ -1,4 +1,4 @@
-package com.soulkey.fspicker.net
+package com.soulkey.fspicker.lib.api
 
 import okhttp3.Interceptor
 import okhttp3.Response

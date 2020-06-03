@@ -1,7 +1,6 @@
-package com.soulkey.fspicker.net
+package com.soulkey.fspicker.lib.api
 
 import com.soulkey.fspicker.config.Constant.FOURSQUARE_BASIC_PARAM
-import com.soulkey.fspicker.net.FoursquareResponse
 import io.reactivex.Single
 import retrofit2.Response
 import retrofit2.http.GET

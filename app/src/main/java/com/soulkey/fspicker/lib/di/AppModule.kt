@@ -1,16 +1,16 @@
-package com.soulkey.fspicker.di
+package com.soulkey.fspicker.lib.di
 
 import androidx.room.Room
 import com.soulkey.fspicker.config.Constant.BASE_URL
 import com.soulkey.fspicker.config.Constant.CONNECT_TIMEOUT
 import com.soulkey.fspicker.config.Constant.READ_TIMEOUT
 import com.soulkey.fspicker.config.Constant.WRITE_TIMEOUT
-import com.soulkey.fspicker.data.RecommendedVenueRepository
-import com.soulkey.fspicker.data.RecommendedVenueRepositoryImpl
-import com.soulkey.fspicker.db.AppDatabase
-import com.soulkey.fspicker.net.FoursquareAPI
-import com.soulkey.fspicker.net.FoursquareClient
-import com.soulkey.fspicker.net.FoursqueareInterceptor
+import com.soulkey.fspicker.lib.data.RecommendedVenueRepository
+import com.soulkey.fspicker.lib.data.RecommendedVenueRepositoryImpl
+import com.soulkey.fspicker.lib.db.AppDatabase
+import com.soulkey.fspicker.lib.api.FoursquareAPI
+import com.soulkey.fspicker.lib.api.FoursquareClient
+import com.soulkey.fspicker.lib.api.FoursqueareInterceptor
 import com.soulkey.fspicker.ui.detail.VenueDetailViewModel
 import com.soulkey.fspicker.ui.main.MainViewModel
 import okhttp3.OkHttpClient

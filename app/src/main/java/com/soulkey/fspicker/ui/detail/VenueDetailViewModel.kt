@@ -5,8 +5,8 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
-import com.soulkey.fspicker.net.FoursquareClient
-import com.soulkey.fspicker.model.Tip
+import com.soulkey.fspicker.lib.api.FoursquareClient
+import com.soulkey.fspicker.lib.model.Tip
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 

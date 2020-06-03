@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.soulkey.fspicker.R
-import com.soulkey.fspicker.model.Tip
+import com.soulkey.fspicker.lib.model.Tip
 import kotlinx.android.synthetic.main.item_tips.view.*
 
 val TipDiff = object : DiffUtil.ItemCallback<Tip>(){

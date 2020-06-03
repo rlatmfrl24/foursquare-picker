@@ -1,4 +1,4 @@
-package com.soulkey.fspicker.di
+package com.soulkey.fspicker.lib.di
 
 import android.app.Application
 import com.facebook.stetho.Stetho

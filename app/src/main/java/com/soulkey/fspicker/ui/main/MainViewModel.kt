@@ -4,8 +4,8 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.soulkey.fspicker.data.RecommendedVenueRepository
-import com.soulkey.fspicker.net.FoursquareClient
+import com.soulkey.fspicker.lib.data.RecommendedVenueRepository
+import com.soulkey.fspicker.lib.api.FoursquareClient
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
