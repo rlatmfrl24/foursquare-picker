@@ -13,11 +13,12 @@ import com.google.android.gms.location.*
 import com.soulkey.fspicker.R
 import com.soulkey.fspicker.config.Constant.PERMISSION_REQUEST_CODE
 import com.soulkey.fspicker.databinding.ActivityMainBinding
+import com.soulkey.fspicker.lib.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     private val mainViewModel: MainViewModel by viewModel()
     private lateinit var binding: ActivityMainBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient

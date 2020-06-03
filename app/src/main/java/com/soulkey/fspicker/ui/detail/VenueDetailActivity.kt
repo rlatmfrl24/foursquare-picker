@@ -2,19 +2,16 @@ package com.soulkey.fspicker.ui.detail
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.soulkey.fspicker.R
 import com.soulkey.fspicker.databinding.ActivityVenueDetailBinding
+import com.soulkey.fspicker.lib.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_venue_detail.*
-import kotlinx.android.synthetic.main.activity_venue_detail.tv_venue_name
-import kotlinx.android.synthetic.main.item_venue.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
-class VenueDetailActivity : AppCompatActivity() {
+class VenueDetailActivity : BaseActivity() {
     private val venueDetailViewModel: VenueDetailViewModel by viewModel()
     private lateinit var binding: ActivityVenueDetailBinding
     private lateinit var tipsAdapter: TipsAdapter
@@ -44,10 +41,5 @@ class VenueDetailActivity : AppCompatActivity() {
         val requestId = intent.getStringExtra("fsId")!!
         venueDetailViewModel.setBasicData(venueName, venueAddress)
         venueDetailViewModel.requestVenueDetail(requestId)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        onBackPressed()
-        return super.onOptionsItemSelected(item)
     }
 }
