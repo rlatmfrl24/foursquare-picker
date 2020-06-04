@@ -22,7 +22,7 @@ class VenueDetailViewModel(private val client: FoursquareAPIClient, private val 
 
     fun setBasicData(name: String, address: String) {
         venueName.value = name
-        venueAddress.value = address+
+        venueAddress.value = address
     }
 
     private fun parseVenueData(data: VenueDetail) {
