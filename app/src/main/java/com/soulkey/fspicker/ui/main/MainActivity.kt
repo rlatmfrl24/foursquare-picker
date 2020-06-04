@@ -29,7 +29,7 @@ class MainActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
         binding.viewModel = mainViewModel
-        mainViewModel.clearVenues()
+        mainViewModel.loadRecentLocationName()
 
         // 위치 권한 요청
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -52,39 +52,46 @@ class MainActivity : BaseActivity() {
         recycler_venue_list.apply { adapter = venueAdapter }
         mainViewModel.recommendedVenues.observe(this, Observer {
             venueAdapter.submitList(it)
-            pb_venues_loading.visibility = View.GONE
-            if (it.isNotEmpty()) {
-                tv_guide_to_refresh.visibility = View.GONE
-                recycler_venue_list.visibility = View.VISIBLE
-            } else if (it.isEmpty() && mainViewModel.isVenuesLoaded.value == true) {
+            Timber.v("diver: ${it.size}")
+            if (it.isEmpty()) {
                 tv_guide_to_refresh.visibility = View.VISIBLE
-                tv_guide_to_refresh.text = "Can't Find Any Venue.."
+                recycler_venue_list.visibility = View.INVISIBLE
             } else {
-                tv_guide_to_refresh.visibility = View.VISIBLE
-                tv_guide_to_refresh.text = "Allow the Location Setting \n&\n Press Refresh Button"
+                tv_guide_to_refresh.visibility = View.INVISIBLE
+                recycler_venue_list.visibility = View.VISIBLE
+            }
+        })
+
+        mainViewModel.isVenuesLoading.observe(this, Observer {loading->
+            if (loading){
+                pb_venues_loading.visibility = View.VISIBLE
+                layout_venue_container.visibility = View.GONE
+            } else {
+                pb_venues_loading.visibility = View.GONE
+                layout_venue_container.visibility = View.VISIBLE
             }
         })
 
         //FAB 동작 설정
         fab_refresh.setOnClickListener {
-            pb_venues_loading.visibility = View.VISIBLE
-            tv_guide_to_refresh.visibility = View.GONE
-            recycler_venue_list.visibility = View.GONE
+            mainViewModel.isVenuesLoading.value = true
             fusedLocationClient.lastLocation.addOnSuccessListener { location ->
                 location?.let {
                     Timber.v("diver:/ LL updated")
                     mainViewModel.updateCurrentLL(it.latitude, it.longitude)
                 }
             }.addOnFailureListener {
-                mainViewModel.updateCurrentLL(1.283644,103.860753)
+                mainViewModel.getRecentLL().also { LL->
+                    mainViewModel.updateCurrentLL(LL.first.toDouble(), LL.second.toDouble())
+                }
                 Timber.v("diver:/ ${it.localizedMessage}")
             }
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        mainViewModel.clearVenues()
+    override fun onResume() {
+        super.onResume()
+        mainViewModel.getRecentLocationData()
     }
 
     override fun onRequestPermissionsResult(

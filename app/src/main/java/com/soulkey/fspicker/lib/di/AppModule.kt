@@ -10,7 +10,7 @@ import com.soulkey.fspicker.lib.data.RecommendedVenueRepositoryImpl
 import com.soulkey.fspicker.lib.db.AppDatabase
 import com.soulkey.fspicker.lib.api.FoursquareAPIService
 import com.soulkey.fspicker.lib.api.FoursquareAPIClient
-import com.soulkey.fspicker.lib.api.FoursqueareInterceptor
+import com.soulkey.fspicker.lib.api.FoursquareInterceptor
 import com.soulkey.fspicker.ui.detail.VenueDetailViewModel
 import com.soulkey.fspicker.ui.main.MainViewModel
 import okhttp3.OkHttpClient
@@ -26,7 +26,7 @@ val AppModule = module {
     //OkHttpClient
     single {
         OkHttpClient.Builder()
-            .addInterceptor(FoursqueareInterceptor())
+            .addInterceptor(FoursquareInterceptor())
             .addInterceptor(HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY })
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)

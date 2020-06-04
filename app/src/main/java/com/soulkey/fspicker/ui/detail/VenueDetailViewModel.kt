@@ -22,7 +22,7 @@ class VenueDetailViewModel(private val client: FoursquareAPIClient, private val 
 
     fun setBasicData(name: String, address: String) {
         venueName.value = name
-        venueAddress.value = address
+        venueAddress.value = address+
     }
 
     private fun parseVenueData(data: VenueDetail) {
@@ -54,15 +54,18 @@ class VenueDetailViewModel(private val client: FoursquareAPIClient, private val 
     }
 
     fun requestVenueDetail(fsId: String): Disposable {
-        return client.getVenueDetail(fsId).subscribe { body ->
+        return client.getVenueDetail(fsId).subscribe({ body ->
             if (body.meta.code == "200") {
                 val data = body.response
                 parseVenueData(data.venue)
             } else {
-                if (body.meta.errorDetail != null){
+                if (body.meta.errorDetail != null) {
                     Toast.makeText(context, body.meta.errorDetail, Toast.LENGTH_SHORT).show()
                 }
             }
-        }
+        }, {
+            Timber.v("diver:/ ${it.localizedMessage}")
+            Toast.makeText(context, "API Connection Error..", Toast.LENGTH_SHORT).show()
+        })
     }
 }
