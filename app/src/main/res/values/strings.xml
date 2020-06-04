@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Foursquare Picker</string>
+    <string name="main_load_error_message">Can\'t Find Any Venue..</string>
+    <string name="main_load_guide_message">Allow the Location Setting \n&amp;\n Press Refresh Button</string>
 </resources>

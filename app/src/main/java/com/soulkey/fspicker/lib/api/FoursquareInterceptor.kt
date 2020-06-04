@@ -4,7 +4,7 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 
-open class FoursqueareInterceptor() : Interceptor {
+open class FoursquareInterceptor : Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
