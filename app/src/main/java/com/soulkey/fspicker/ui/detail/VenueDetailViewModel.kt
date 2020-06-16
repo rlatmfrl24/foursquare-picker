@@ -6,12 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
 import com.soulkey.fspicker.lib.api.FoursquareAPIClient
+import com.soulkey.fspicker.lib.data.VenueDetailRepository
 import com.soulkey.fspicker.lib.model.Tip
 import com.soulkey.fspicker.lib.model.VenueDetail
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 
-class VenueDetailViewModel(private val client: FoursquareAPIClient, private val context: Context) : ViewModel() {
+class VenueDetailViewModel(private val venueDetailRepository: VenueDetailRepository, private val context: Context) : ViewModel() {
     val venueName = MutableLiveData("Venue Name")
     val venueAddress = MutableLiveData("Venue Address")
     val venuePhone = MutableLiveData("Unknown")
@@ -54,7 +55,7 @@ class VenueDetailViewModel(private val client: FoursquareAPIClient, private val 
     }
 
     fun requestVenueDetail(fsId: String): Disposable {
-        return client.getVenueDetail(fsId).subscribe({ body ->
+        return venueDetailRepository.requestVenueDetail(fsId).subscribe({ body ->
             if (body.meta.code == "200") {
                 val data = body.response
                 parseVenueData(data.venue)

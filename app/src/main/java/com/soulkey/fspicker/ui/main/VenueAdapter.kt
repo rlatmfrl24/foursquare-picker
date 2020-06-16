@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.soulkey.fspicker.R
 import com.soulkey.fspicker.lib.model.RecommendedVenue
 import com.soulkey.fspicker.ui.detail.VenueDetailActivity
@@ -29,7 +30,9 @@ class VenueAdapter :
         fun bind(venue: RecommendedVenue){
             itemView.tv_venue_name.text = venue.name
             itemView.tv_venue_address.text = venue.address
-            Glide.with(itemView).load(venue.iconLink).centerCrop().into(itemView.iv_venue_photo)
+            Glide.with(itemView).load(venue.iconLink)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .centerCrop().into(itemView.iv_venue_photo)
             itemView.setOnClickListener {
                 Intent(itemView.context, VenueDetailActivity::class.java).also { intent ->
                     intent.putExtra("fsId", venue.fsId)

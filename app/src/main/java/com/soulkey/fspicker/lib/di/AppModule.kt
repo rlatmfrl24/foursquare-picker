@@ -11,6 +11,8 @@ import com.soulkey.fspicker.lib.db.AppDatabase
 import com.soulkey.fspicker.lib.api.FoursquareAPIService
 import com.soulkey.fspicker.lib.api.FoursquareAPIClient
 import com.soulkey.fspicker.lib.api.FoursquareInterceptor
+import com.soulkey.fspicker.lib.data.VenueDetailRepository
+import com.soulkey.fspicker.lib.data.VenueDetailRepositoryImpl
 import com.soulkey.fspicker.ui.detail.VenueDetailViewModel
 import com.soulkey.fspicker.ui.main.MainViewModel
 import okhttp3.OkHttpClient
@@ -54,9 +56,10 @@ val AppModule = module {
 
     single { FoursquareAPIClient(get(), get()) }
     single { get<AppDatabase>().recommendedVenueDao() }
-    single<RecommendedVenueRepository> {RecommendedVenueRepositoryImpl(get())}
+    single<RecommendedVenueRepository> {RecommendedVenueRepositoryImpl(get(), get())}
+    single<VenueDetailRepository> {VenueDetailRepositoryImpl(get())}
 
     //ViewModel Injection
-    viewModel { MainViewModel(get(), get(), get()) }
+    viewModel { MainViewModel(get(), get()) }
     viewModel { VenueDetailViewModel(get(), get()) }
 }
