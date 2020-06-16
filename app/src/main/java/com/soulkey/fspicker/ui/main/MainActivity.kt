@@ -81,6 +81,7 @@ class MainActivity : BaseActivity() {
                     mainViewModel.updateCurrentLL(it.latitude, it.longitude)
                 }
             }.addOnFailureListener {
+                Timber.v("diver:/ ${it.localizedMessage}")
                 mainViewModel.getRecentLL().also { LL->
                     mainViewModel.updateCurrentLL(LL.first.toDouble(), LL.second.toDouble())
                 }

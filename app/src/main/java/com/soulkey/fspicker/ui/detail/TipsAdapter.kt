@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.soulkey.fspicker.R
 import com.soulkey.fspicker.lib.model.Tip
 import kotlinx.android.synthetic.main.item_tips.view.*
@@ -27,6 +28,7 @@ class TipsAdapter : ListAdapter<Tip, TipsAdapter.TipViewHolder>(TipDiff){
             itemView.tv_tips_user_name.text = tip.userName
             itemView.tv_tips_description.text = tip.description
             Glide.with(itemView).load(tip.iconLink)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .circleCrop()
                 .into(itemView.iv_tips_user_photo)
         }
